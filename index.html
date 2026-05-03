@@ -304,7 +304,8 @@ async function fetchRSS(rssUrl) {
       const res = await fetch(proxy.url(rssUrl), { signal: AbortSignal.timeout(8000) });
       if (!res.ok) continue;
       const text = await proxy.parse(res);
-      if (text && text.includes('<item>')) return text;
+      // <channel> 이 있으면 RSS 정상 응답 — 결과 0건이어도 성공으로 처리
+      if (text && text.includes('<channel>')) return text;
     } catch(e) { /* 다음 프록시 시도 */ }
   }
   throw new Error('모든 프록시 실패');
