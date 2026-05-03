@@ -243,9 +243,9 @@
     <select id="dateMode">
       <option value="today">오늘</option>
       <option value="yesterday">어제</option>
-      <option value="week">최근 7일</option>
+      <!-- <option value="week">최근 7일</option>
       <option value="month">최근 한 달</option>
-      <option value="custom">직접 입력</option>
+      <option value="custom">직접 입력</option> -->
     </select>
   </div>
 
@@ -338,8 +338,8 @@ function applyDateMode() {
 
   let start = new Date(today), end = new Date(today);
   if (mode === 'yesterday') { start.setDate(start.getDate()-1); end.setDate(end.getDate()-1); }
-  else if (mode === 'week')  { start.setDate(start.getDate()-7); }
-  else if (mode === 'month') { start.setMonth(start.getMonth()-1); }
+  // else if (mode === 'week')  { start.setDate(start.getDate()-7); }
+  // else if (mode === 'month') { start.setMonth(start.getMonth()-1); }
 
   document.getElementById('startDate').value = ymd(start);
   document.getElementById('endDate').value   = ymd(end);
