@@ -1,0 +1,17 @@
+{
+  "name": "뉴스 스크랩",
+  "short_name": "뉴스스크랩",
+  "description": "Google 뉴스 날짜별 검색 앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/google/material-design-icons/master/png/action/article/materialicons/48dp/2x/baseline_article_black_48dp.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ]
+}
