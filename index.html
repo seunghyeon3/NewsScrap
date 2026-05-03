@@ -381,6 +381,23 @@ function render() {
   pager.innerHTML = html;
 }
 
+function renderResult() {
+  if (allItems.length === 0) {
+    document.getElementById('list').innerHTML = `
+      <div style="text-align:center;padding:48px 0;color:var(--text2);">
+        <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+        <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">검색 결과가 없습니다</div>
+        <div style="font-size:13px;line-height:1.7;">
+          검색어 또는 날짜 조건을 변경해보세요.<br/>
+          해당 기간에 관련 뉴스가 없을 수 있습니다.
+        </div>
+      </div>`;
+    document.getElementById('pager').innerHTML = '';
+  } else {
+    render();
+  }
+}
+
 function goPage(p) {
   const size  = parseInt(document.getElementById('pageSize').value, 10);
   const total = Math.ceil(allItems.length / size);
@@ -447,26 +464,13 @@ async function search() {
     });
 
     currentPage = 1;
-
-    if (allItems.length === 0) {
-      document.getElementById('list').innerHTML = `
-        <div style="text-align:center;padding:48px 0;color:var(--text2);">
-          <div style="font-size:40px;margin-bottom:12px;">🔍</div>
-          <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">검색 결과가 없습니다</div>
-          <div style="font-size:13px;line-height:1.7;">
-            검색어 또는 날짜 조건을 변경해보세요.<br/>
-            해당 기간에 관련 뉴스가 없을 수 있습니다.
-          </div>
-        </div>`;
-      document.getElementById('pager').innerHTML = '';
-      setStatus(`검색 완료 · 0건`, 'info');
-    } else {
-      render();
-      setStatus(`검색 완료 · ${allItems.length}건`, 'success');
-    }
+    setStatus(`검색 완료 · ${allItems.length}건`, allItems.length > 0 ? 'success' : 'info');
   } catch(e) {
+    allItems = [];
+    currentPage = 1;
     setStatus('검색 실패: 네트워크를 확인해주세요', 'error');
   } finally {
+    renderResult();
     btn.classList.remove('loading');
     txt.textContent = '검색';
   }
