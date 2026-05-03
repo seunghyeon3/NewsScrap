@@ -243,9 +243,9 @@
     <select id="dateMode">
       <option value="today">오늘</option>
       <option value="yesterday">어제</option>
-      <!-- <option value="week">최근 7일</option>
+      <option value="week">최근 7일</option>
       <option value="month">최근 한 달</option>
-      <option value="custom">직접 입력</option> -->
+      <option value="custom">직접 입력</option>
     </select>
   </div>
 
@@ -338,8 +338,8 @@ function applyDateMode() {
 
   let start = new Date(today), end = new Date(today);
   if (mode === 'yesterday') { start.setDate(start.getDate()-1); end.setDate(end.getDate()-1); }
-  // else if (mode === 'week')  { start.setDate(start.getDate()-7); }
-  // else if (mode === 'month') { start.setMonth(start.getMonth()-1); }
+  else if (mode === 'week')  { start.setDate(start.getDate()-7); }
+  else if (mode === 'month') { start.setMonth(start.getMonth()-1); }
 
   document.getElementById('startDate').value = ymd(start);
   document.getElementById('endDate').value   = ymd(end);
@@ -449,8 +449,23 @@ async function search() {
     });
 
     currentPage = 1;
-    render();
-    setStatus(`검색 완료 · ${allItems.length}건`, 'success');
+
+    if (allItems.length === 0) {
+      document.getElementById('list').innerHTML = `
+        <div style="text-align:center;padding:48px 0;color:var(--text2);">
+          <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+          <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">검색 결과가 없습니다</div>
+          <div style="font-size:13px;line-height:1.7;">
+            검색어 또는 날짜 조건을 변경해보세요.<br/>
+            해당 기간에 관련 뉴스가 없을 수 있습니다.
+          </div>
+        </div>`;
+      document.getElementById('pager').innerHTML = '';
+      setStatus(`검색 완료 · 0건`, 'info');
+    } else {
+      render();
+      setStatus(`검색 완료 · ${allItems.length}건`, 'success');
+    }
   } catch(e) {
     setStatus('검색 실패: 네트워크를 확인해주세요', 'error');
   } finally {
