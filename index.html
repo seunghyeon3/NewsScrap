@@ -243,21 +243,14 @@
     <select id="dateMode">
       <option value="today">오늘</option>
       <option value="yesterday">어제</option>
-      <option value="week">최근 7일</option>
-      <option value="month">최근 한 달</option>
       <option value="custom">직접 입력</option>
     </select>
   </div>
 
-  <div class="row2" id="dateInputs" style="display:none">
-    <div>
-      <label>시작일</label>
-      <input id="startDate" type="date" />
-    </div>
-    <div>
-      <label>종료일</label>
-      <input id="endDate" type="date" />
-    </div>
+  <div id="dateInputs" style="display:none">
+    <label>날짜 선택</label>
+    <input id="startDate" type="date" />
+    <input id="endDate" type="date" style="display:none" />
   </div>
 
   <div class="row2">
@@ -331,19 +324,23 @@ function applyDateMode() {
   const inputs = document.getElementById('dateInputs');
 
   if (mode === 'custom') {
-    inputs.style.display = 'grid';
+    inputs.style.display = 'block';
     return;
   }
   inputs.style.display = 'none';
 
-  let start = new Date(today), end = new Date(today);
-  if (mode === 'yesterday') { start.setDate(start.getDate()-1); end.setDate(end.getDate()-1); }
-  else if (mode === 'week')  { start.setDate(start.getDate()-7); }
-  else if (mode === 'month') { start.setMonth(start.getMonth()-1); }
+  let d = new Date(today);
+  if (mode === 'yesterday') d.setDate(d.getDate() - 1);
 
-  document.getElementById('startDate').value = ymd(start);
-  document.getElementById('endDate').value   = ymd(end);
+  // 오늘/어제: start = end = 해당 날짜
+  document.getElementById('startDate').value = ymd(d);
+  document.getElementById('endDate').value   = ymd(d);
 }
+
+// 직접 입력: 날짜 하나 선택 시 start = end 동기화
+document.getElementById('startDate').addEventListener('change', function() {
+  document.getElementById('endDate').value = this.value;
+});
 
 document.getElementById('dateMode').addEventListener('change', applyDateMode);
 applyDateMode();
